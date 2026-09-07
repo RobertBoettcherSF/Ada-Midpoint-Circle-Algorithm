@@ -19,10 +19,10 @@ procedure Tests is
    -- Global state tracking for generic procedure testing
    Generic_Pixel_Count : Natural := 0;
    procedure Mock_Pixel (X, Y : Coordinate) is
+      pragma Warnings (Off, "formal parameter ""*"" is not referenced");
+      pragma Unreferenced (X, Y);
+      pragma Warnings (On, "formal parameter ""*"" is not referenced");
    begin
-      if X = 0 and Y = 0 then
-         null;
-      end if;
       Generic_Pixel_Count := Generic_Pixel_Count + 1;
    end Mock_Pixel;
 
@@ -224,7 +224,8 @@ begin
    begin
       Check ("11.1 Non-trivial distance calculated", Chebyshev_Distance (P1, P2) = 10);
       Check ("11.2 Self distance is zero", Chebyshev_Distance (P1, P3) = 0);
-      Check ("11.3 Symmetry holds", Chebyshev_Distance (P1, P2) = Chebyshev_Distance (P2, P1));
+      Check ("11.3 Symmetry holds",
+             Chebyshev_Distance (P1, P2) = Chebyshev_Distance (P1 => P2, P2 => P1));
    end;
 
    -- TEST 12 -- Large Radius Scaling and Range Safety
